@@ -47,9 +47,9 @@ export default function YourRequests() {
   }, [user?.id]);
   if (!user) {
     return (
-      <div className="flex justify-center items-baseline mt-30 min-h-screen text-center px-4">
+      <div className="flex justify-center items-baseline mt-20 min-h-screen text-center px-4">
         <div className="text-lg font-semibold">
-          🚫 You are not signed in. Please sign in to access your Requests.
+          🚫 You are not signed in. Please sign in to access your Help Requests.
         </div>
       </div>
     );

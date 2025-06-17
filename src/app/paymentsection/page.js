@@ -3,8 +3,10 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import nProgress from 'nprogress';
+import { useUser,isLoaded } from '@clerk/nextjs';
 const Page = () => {
     const router = useRouter();
+    const { user,isLoaded } = useUser();
     const handlegrouppay = (async () => {
         nProgress.start();
         try {
@@ -35,6 +37,15 @@ const Page = () => {
             nProgress.done();
         }
     })
+    if (!user || !isLoaded) {
+        return (
+            <div className="flex justify-center items-baseline pt-30 min-h-screen px-4 text-center">
+                <div className="text-lg font-semibold">
+                    🚫 You are not signed in. Please sign to Manage Your Payments.
+                </div>
+            </div>
+        );
+    }
     return (
         <div className="p-4 space-y-6">
             <h1 className="text-2xl font-semibold text-center">💡 Overview</h1>
