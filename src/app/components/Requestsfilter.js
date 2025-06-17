@@ -11,6 +11,12 @@ export default function Requestfilter() {
   // if (!user) return null;
   return (
     <div className="px-4 md:px-10 mt-6 space-y-6">
+      <div className="text-center">
+        <h2 className="text-xl font-semibold">💡 Manage Financial Help Requests</h2>
+        <p className="text-sm text-muted-foreground">
+          View and switch between your submitted requests and those created by others seeking support.
+        </p>
+      </div>
       {/* Toggle Buttons */}
       <div className="flex justify-center gap-4 mb-4">
         <Button

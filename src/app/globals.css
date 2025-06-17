@@ -114,10 +114,12 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
 }
+
 :root {
   --radius: 0.65rem;
   --background: oklch(1 0 0);
@@ -187,7 +189,15 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 }
+
+
+
+
 #nprogress .bar {
   background: rgb(157, 0, 255);
   height: 3px;
+}
+
+body:has(.chat-open) {
+  overflow: hidden;
 }

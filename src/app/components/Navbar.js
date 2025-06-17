@@ -15,32 +15,54 @@ import { ModeToggle } from './mode-toggle';
 
 const navLinks = [
   { name: 'Requests', href: '/' },
-  { name: 'Groups', href: '/groups' },
+  { name: 'Payments', href: '/paymentsection' },
   { name: 'Dashboard', href: '/dashboard' },
 ];
-
+import Lottie from 'lottie-react';
+import { useState, useEffect, useRef } from 'react';
+import { useCreateUserOnLogin } from './createuserlogin';
 export default function Navbar() {
+  useCreateUserOnLogin();
+  const [animationData, setAnimationData] = useState(null);
+  const lottieRef = useRef();
+
+  useEffect(() => {
+    fetch('/help.json')
+      .then((res) => res.json())
+      .then(setAnimationData);
+  }, []);
   return (
     <header className="backdrop-blur-xs sticky top-0 z-50 w-full border-b bg-background/95 supports-[backdrop-filter]:bg-background/60">
-      <div className="flex h-16 items-center justify-between px-4 md:px-6 max-w-screen-xl mx-auto">
+      <div className="flex h-20 items-center justify-between max-w-screen-xl mx-auto">
         {/* Logo */}
-        <Link href="/" className="text-4xl font-bold tracking-tight">
-          Open Hands
-        </Link>
-
-        {/* Desktop nav */}
-        <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
-          {navLinks.map((link) => (
-            <Link
-              key={link.name}
-              href={link.href}
-              className="text-muted-foreground transition-colors hover:text-foreground"
-            >
-              {link.name}
+        <div className='flex items-center gap-10'>
+          <div className='flex items-center'>
+            {animationData && (
+              <Lottie
+                className="w-12 h-12 md:w-25 md:h-30"
+                animationData={animationData}
+                loop={true}
+                lottieRef={lottieRef}
+              />
+            )}
+            <Link href="/" className="text-3xl font-bold tracking-tight">
+              HelpShare
             </Link>
-          ))}
-        </nav>
-
+          </div>
+          <p>|</p>
+          {/* Desktop nav */}
+          <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
+            {navLinks.map((link) => (
+              <Link
+                key={link.name}
+                href={link.href}
+                className="text-muted-foreground transition-colors hover:text-foreground"
+              >
+                {link.name}
+              </Link>
+            ))}
+          </nav>
+        </div>
         {/* Right: Theme toggle + User */}
         <div className="flex items-center gap-2">
           <ModeToggle />
@@ -95,7 +117,7 @@ export default function Navbar() {
                     </SignInButton>
                   </SignedOut>
                   <SignedIn>
-                    <UserButton afterSignOutUrl="/" />
+                    <UserButton afterSignOutUrl="/"/>
                   </SignedIn>
                 </div>
               </SheetContent>

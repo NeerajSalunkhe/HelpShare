@@ -4,11 +4,9 @@ import { useUser } from '@clerk/nextjs';
 
 export function useCreateUserOnLogin() {
     const { user } = useUser();
-
     useEffect(() => {
         const createUser = async () => {
             if (!user) return;
-
             try {
                 const res = await fetch('/api/user', {
                     method: 'POST',
@@ -19,6 +17,7 @@ export function useCreateUserOnLogin() {
                         userid: user.id,
                         username: `${user.firstName} ${user.lastName}`,
                         phone: user?.phoneNumbers?.[0]?.phoneNumber || '',
+                        email: user?.primaryEmailAddress?.emailAddress || '',
                     }),
                 });
 
@@ -29,12 +28,11 @@ export function useCreateUserOnLogin() {
                 }
 
                 const data = await res.json(); // Now safe
-                console.log('✅ User created or found:', data);
+                // console.log('✅ User created or found:', data);
             } catch (error) {
                 console.error('❌ Error in createUser:', error);
             }
         };
-
         createUser();
     }, [user]);
 

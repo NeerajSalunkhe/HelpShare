@@ -15,10 +15,9 @@ import { useUser } from '@clerk/nextjs';
 import { v4 as uuid } from 'uuid';
 import { useState, useEffect } from 'react';
 import nProgress from 'nprogress';
-
+// import { useUser } from '@clerk/nextjs';
 // Zod schema stays same
 const formSchema = z.object({
-  fullName: z.string().min(2, 'Full name is required'),
   mainReason: z.string().min(5, 'Title should be at least 5 characters'),
   description: z.string().min(10, 'Description should be at least 10 characters'),
   amount: z.string().refine((val) => !isNaN(Number(val)) && Number(val) > 0, {
@@ -66,8 +65,8 @@ export default function NeedHelpForm() {
   }, [user?.id]);
 
   useEffect(() => {
-    if (!loadingUserData && (RAZORPAY_KEY_ID === '' || RAZORPAY_SECRET === '')) {
-      toast.warn('Please set up your Razorpay credentials in the dashboard first ⚙️');
+    if (user && (RAZORPAY_KEY_ID === '' || RAZORPAY_SECRET === '')) {
+      toast('Please set up your Razorpay credentials in the dashboard first ⚙️');
     }
   }, [loadingUserData, RAZORPAY_KEY_ID, RAZORPAY_SECRET]);
 
@@ -81,7 +80,7 @@ export default function NeedHelpForm() {
     const formData = new FormData();
     formData.append('userid', user.id);
     formData.append('needid', uuid());
-    formData.append('fullName', data.fullName);
+    formData.append('fullName', user.fullName);
     formData.append('mainReason', data.mainReason);
     formData.append('description', data.description);
     formData.append('requiredAmount', data.amount);
@@ -120,7 +119,7 @@ export default function NeedHelpForm() {
     }
     handleSubmit(onSubmit)(e);
   };
-
+  if (loadingUserData) return <p className="text-center py-10">Loading Razorpay credentials...</p>;
   return (
     <Card className="max-w-3xl mx-auto mt-10 shadow-lg border-0 rounded-2xl p-6 sm:p-10">
       <CardContent>
@@ -130,8 +129,13 @@ export default function NeedHelpForm() {
           {/* Full Name */}
           <div className="space-y-1">
             <Label htmlFor="fullName">Full Name</Label>
-            <Input id="fullName" placeholder="Enter your full name" {...register('fullName')} />
-            {errors.fullName && <p className="text-sm">{errors.fullName.message}</p>}
+            <Input
+              id="fullName"
+              value={user?.fullName || ''}
+              disabled
+              readOnly
+              className="opacity-70 cursor-not-allowed"
+            />
           </div>
 
           {/* Title and Amount */}
@@ -173,14 +177,25 @@ export default function NeedHelpForm() {
 
           {/* Submit */}
           <div className="pt-2">
-            <Button
-              disabled={submitting || (!RAZORPAY_KEY_ID && !RAZORPAY_SECRET)}
-              type="submit"
-              className="w-full text-lg py-6 flex items-center justify-center gap-2"
-            >
-              {submitting ? <Loader2Icon className="animate-spin" /> : <UploadCloud className="h-5 w-5" />}
-              {submitting ? 'Submitting...' : 'Submit Request'}
-            </Button>
+            {RAZORPAY_KEY_ID && RAZORPAY_SECRET ? (
+              <Button
+                disabled={submitting}
+                type="submit"
+                className="w-full text-lg py-6 flex items-center justify-center gap-2"
+              >
+                {submitting ? <Loader2Icon className="animate-spin" /> : <UploadCloud className="h-5 w-5" />}
+                {submitting ? 'Submitting...' : 'Submit Request'}
+              </Button>
+            ) : (
+              <Button
+                disabled
+                type="button"
+                className="w-full text-lg py-6 flex items-center justify-center gap-2 cursor-not-allowed"
+              >
+                <UploadCloud className="h-5 w-5" />
+                First fill credentials
+              </Button>
+            )}
           </div>
         </form>
       </CardContent>

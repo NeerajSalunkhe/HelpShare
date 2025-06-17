@@ -5,6 +5,7 @@ import {
 } from '@clerk/nextjs';
 import { ThemeProvider } from './components/theme-provider';
 import { ToastContainer, toast } from 'react-toastify';
+
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin'],

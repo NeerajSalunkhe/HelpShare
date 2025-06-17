@@ -71,8 +71,8 @@ export default function YourRequests() {
   return (
     <section className="mt-10 px-4 md:px-10">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4">
-        <h2 className="text-2xl md:text-3xl font-bold text-center sm:text-left">Your Requests</h2>
+      <div className="flex flex-col sm:flex-row items-center justify-center mb-8 gap-4">
+        <h2 className="text-2xl md:text-2xl font-bold text-center sm:text-left text-gray-400">Your Requests</h2>
         <Button
           onClick={handleClick}
           className="cursor-pointer px-6 py-2 rounded-full shadow-md hover:scale-105 transition-transform"

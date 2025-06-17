@@ -15,6 +15,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    email: {
+      type: String,
+      required: true,
+    },
     razorpay_key_id: {
       type: String,
     },

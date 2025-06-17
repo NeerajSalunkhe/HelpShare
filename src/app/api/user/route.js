@@ -20,6 +20,7 @@ export async function POST(req) {
 
     if (data.username !== undefined) update.username = data.username;
     if (data.phone !== undefined) update.phone = data.phone;
+    if (data.email !== undefined) update.email = data.email;
     if (data.razorpay_key_id !== undefined) update.razorpay_key_id = data.razorpay_key_id;
     if (data.razorpay_secret !== undefined) update.razorpay_secret = data.razorpay_secret;
 

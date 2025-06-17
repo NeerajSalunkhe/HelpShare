@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Loader2Icon, Copy, CopyCheck, Eye, EyeOff } from "lucide-react";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import nProgress from 'nprogress';
 export default function DashboardPage() {
     const { user } = useUser();
     const [showSecret, setShowSecret] = useState(false);
@@ -29,7 +29,7 @@ export default function DashboardPage() {
     useEffect(() => {
         const fetchUserData = async () => {
             if (!user?.id) return;
-
+            nProgress.start();
             try {
                 const res = await fetch(`/api/user/${user.id}`);
                 const data = await res.json();
@@ -42,6 +42,7 @@ export default function DashboardPage() {
                 console.error("Failed to load Razorpay credentials:", err);
             } finally {
                 setLoadingUserData(false);
+                nProgress.done();
             }
         };
 
@@ -56,6 +57,7 @@ export default function DashboardPage() {
 
     const handleSave = async () => {
         setIsSaving(true);
+        nProgress.start();
         try {
             const payload = {
                 userid: user?.id,
@@ -88,6 +90,7 @@ export default function DashboardPage() {
             toast.error('An error occurred!');
         } finally {
             setIsSaving(false);
+            nProgress.done();
         }
     };
 
@@ -110,82 +113,84 @@ export default function DashboardPage() {
                     </Avatar>
                     <h1 className="text-2xl font-bold">{user?.fullName}</h1>
                 </div>
-
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Your Razorpay Credentials</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-6">
-                        {/* Razorpay Key ID */}
-                        <div className="space-y-1">
-                            <Label>Razorpay Key ID</Label>
-                            <div className="relative">
-                                <Input
-                                    value={RAZORPAY_KEY_ID}
-                                    onChange={(e) => setKeyId(e.target.value)}
-                                    className="bg-muted pr-12"
-                                />
-                                <div className="absolute inset-y-0 right-2 flex items-center">
-                                    <Button
-                                        size="icon"
-                                        variant="ghost"
-                                        onClick={() => handleCopy(RAZORPAY_KEY_ID, 'Key ID')}
-                                    >
-                                        {copiedField === 'Key ID' ? (
-                                            <CopyCheck className="w-5 h-5 text-green-600" />
-                                        ) : (
-                                            <Copy className="w-5 h-5" />
-                                        )}
-                                    </Button>
+                <div>
+                    <Card className={'bg-gray-8=600'}>
+                        <CardHeader>
+                            <CardTitle>Your Razorpay Credentials</CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-6">
+                            {/* Razorpay Key ID */}
+                            <div className="space-y-1">
+                                <Label>Razorpay Key ID</Label>
+                                <div className="relative">
+                                    <Input
+                                        value={RAZORPAY_KEY_ID}
+                                        onChange={(e) => setKeyId(e.target.value)}
+                                        className="bg-muted pr-12"
+                                    />
+                                    <div className="absolute inset-y-0 right-2 flex items-center">
+                                        <Button
+                                            size="icon"
+                                            variant="ghost"
+                                            onClick={() => handleCopy(RAZORPAY_KEY_ID, 'Key ID')}
+                                        >
+                                            {copiedField === 'Key ID' ? (
+                                                <CopyCheck className="w-5 h-5 text-green-600" />
+                                            ) : (
+                                                <Copy className="w-5 h-5" />
+                                            )}
+                                        </Button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        {/* Razorpay Secret */}
-                        <div className="space-y-1">
-                            <Label>Razorpay Secret</Label>
-                            <div className="relative">
-                                <Input
-                                    type={showSecret ? 'text' : 'password'}
-                                    value={RAZORPAY_SECRET}
-                                    onChange={(e) => setSecret(e.target.value)}
-                                    className="bg-muted pr-24"
-                                />
-                                <div className="absolute inset-y-0 right-2 flex items-center gap-2">
-                                    <Button
-                                        size="icon"
-                                        variant="ghost"
-                                        onClick={() => handleCopy(RAZORPAY_SECRET, 'Secret')}
-                                    >
-                                        {copiedField === 'Secret' ? (
-                                            <CopyCheck className="w-5 h-5 text-green-600" />
-                                        ) : (
-                                            <Copy className="w-5 h-5" />
-                                        )}
-                                    </Button>
-                                    <Button
-                                        size="icon"
-                                        variant="ghost"
-                                        onClick={() => setShowSecret(!showSecret)}
-                                    >
-                                        {showSecret ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                                    </Button>
+                            {/* Razorpay Secret */}
+                            <div className="space-y-1">
+                                <Label>Razorpay Secret</Label>
+                                <div className="relative">
+                                    <Input
+                                        type={showSecret ? 'text' : 'password'}
+                                        value={RAZORPAY_SECRET}
+                                        onChange={(e) => setSecret(e.target.value)}
+                                        className="bg-muted pr-24"
+                                    />
+                                    <div className="absolute inset-y-0 right-2 flex items-center gap-2">
+                                        <Button
+                                            size="icon"
+                                            variant="ghost"
+                                            onClick={() => handleCopy(RAZORPAY_SECRET, 'Secret')}
+                                        >
+                                            {copiedField === 'Secret' ? (
+                                                <CopyCheck className="w-5 h-5 text-green-600" />
+                                            ) : (
+                                                <Copy className="w-5 h-5" />
+                                            )}
+                                        </Button>
+                                        <Button
+                                            size="icon"
+                                            variant="ghost"
+                                            onClick={() => setShowSecret(!showSecret)}
+                                        >
+                                            {showSecret ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                        </Button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <Button className="w-full" onClick={handleSave} disabled={isSaving}>
-                            {isSaving ? (
-                                <div className="flex items-center justify-center gap-2">
-                                    <Loader2Icon className="w-4 h-4 animate-spin" />
-                                    Please wait
-                                </div>
-                            ) : (
-                                'Save Credentials'
-                            )}
-                        </Button>
-                    </CardContent>
-                </Card>
+                            <Button className="w-full" onClick={handleSave} disabled={isSaving}>
+                                {isSaving ? (
+                                    <div className="flex items-center justify-center gap-2">
+                                        <Loader2Icon className="w-4 h-4 animate-spin" />
+                                        Please wait
+                                    </div>
+                                ) : (
+                                    'Save Credentials'
+                                )}
+                            </Button>
+                        </CardContent>
+                    </Card>
+                </div>
+
             </div>
             <ToastContainer
                 position="top-right"              // top-left | top-right | top-center | bottom-left | bottom-right | bottom-center

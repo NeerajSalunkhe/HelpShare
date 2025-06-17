@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -19,7 +19,6 @@ import ChatBox from '@/app/components/ChatBox';
 export default function RequestDetails() {
   const { id } = useParams();
   const { user, isLoaded } = useUser();
-
   const [need, setNeed] = useState(null);
   const [owner, setOwner] = useState(null);
   const [form, setForm] = useState({ name: '', amount: '' });
@@ -28,6 +27,8 @@ export default function RequestDetails() {
   const [showProof2, setShowProof2] = useState(false);
   const [fullImage, setFullImage] = useState(null);
   const [done, setDone] = useState(false)
+  const [showChat, setShowChat] = useState(false);
+
   useEffect(() => {
     const fetchNeed = async () => {
       nProgress.start();
@@ -78,10 +79,14 @@ export default function RequestDetails() {
       return;
     }
 
+    if(user){
+      form.name=user.fullName;
+    }
     if (!form.name || !form.amount) {
       toast.error('Please fill out your name and amount.');
       return;
     }
+
 
     nProgress.start();
     setPayload(true);
@@ -94,6 +99,7 @@ export default function RequestDetails() {
       });
 
       const data = await res.json();
+      console.log(data);
       if (!data.success || !data.order?.id) {
         throw new Error('Failed to create order');
       }
@@ -213,7 +219,20 @@ export default function RequestDetails() {
           <p><strong>Name:</strong> {owner?.username}</p>
           <div className='flex justify-between items-center'>
             <p><strong>Contact Me:</strong> {owner?.phone}</p>
-            <ChatBox/>
+            <Button
+              variant="outline"
+              className="ml-auto cursor-pointer"
+              onClick={() => setShowChat(true)}
+            >
+              💬 Open Chat
+            </Button>
+            {showChat && (
+              <ChatBox
+                requestId={id}
+                ownerId={need.userid}
+                onClose={() => setShowChat(false)}
+              />
+            )}
           </div>
           <p><strong>Title:</strong> {need.mainReason}</p>
           <p><strong>Description:</strong> {need.description}</p>
@@ -239,14 +258,16 @@ export default function RequestDetails() {
             >
               <h3 className="text-lg font-semibold mb-2">Help This Person 💖</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <Label className="p-1">Your Name</Label>
-                  <Input
-                    value={form.name}
-                    onChange={(e) => setForm({ ...form, name: e.target.value })}
-                    required
-                  />
-                </div>
+                {!user?.fullName && (
+                  <div>
+                    <Label className="p-1">Your Name</Label>
+                    <Input
+                      value={form.name}
+                      onChange={(e) => setForm({ ...form, name: e.target.value })}
+                      required
+                    />
+                  </div>
+                )}
                 <div>
                   <Label className="p-1">Amount (₹)</Label>
                   <Input
@@ -257,6 +278,7 @@ export default function RequestDetails() {
                   />
                 </div>
               </div>
+
 
               {payload ? (
                 <Button disabled className="w-full">
