@@ -140,6 +140,7 @@ export default function PersonalPayPage() {
           `Payment Recieved by ${senderName}`,
           `Hi ${payment.payername},\n\nYour payment of ₹${payment.amount} for "${payment.reason}" has been marked as received by ${senderName}.\n\nThank you!`
         );
+        toast.success(`Reminder sent to ${payment.payername}`);
       }
 
       // Then update the backend to mark as done

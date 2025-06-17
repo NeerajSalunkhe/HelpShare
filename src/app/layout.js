@@ -21,7 +21,7 @@ const geistMono = Geist_Mono({
 export const metadata = {
   title: 'HelpShare',
   icons: {
-    icon: '/helpshare.png',
+    icon: '/helpshare.svg',
   },
 };
 
