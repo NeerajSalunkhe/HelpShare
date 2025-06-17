@@ -184,7 +184,7 @@ export default function PayToHimPage() {
 
       <div className="space-y-3 bg-muted/40 p-4 rounded-xl shadow-md">
         <Input
-          placeholder="Sender Name *"
+          placeholder="Receiver's Name *"
           value={newPayment.sendername}
           onChange={(e) => setNewPayment({ ...newPayment, sendername: e.target.value })}
         />
@@ -200,7 +200,7 @@ export default function PayToHimPage() {
           onChange={(e) => setNewPayment({ ...newPayment, reason: e.target.value })}
         />
         <Input
-          placeholder="Sender Email (optional)"
+          placeholder="Reciever's Email (optional)"
           value={newPayment.senderemail}
           onChange={(e) => setNewPayment({ ...newPayment, senderemail: e.target.value })}
         />
