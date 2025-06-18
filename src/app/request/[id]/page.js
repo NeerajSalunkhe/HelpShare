@@ -15,6 +15,7 @@ import { initiate } from '../../../../actions/useractions';
 import { Loader2Icon, X } from 'lucide-react';
 import { ToastContainer, toast } from 'react-toastify';
 import ChatBox from '@/app/components/ChatBox';
+import BounceInTop from '@/app/components/BounceInTop';
 
 export default function RequestDetails() {
   const { id } = useParams();
@@ -79,8 +80,8 @@ export default function RequestDetails() {
       return;
     }
 
-    if(user){
-      form.name=user.fullName;
+    if (user) {
+      form.name = user.fullName;
     }
     if (!form.name || !form.amount) {
       toast.error('Please fill out your name and amount.');
@@ -183,144 +184,146 @@ export default function RequestDetails() {
 
   return (
     <div className="max-w-5xl mx-auto p-6 md:p-10">
-      <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
+      <BounceInTop>
+        <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
 
-      {fullImage && (
-        <div className="fixed inset-0 z-50 bg-black bg-opacity-90 flex items-center justify-center">
-          <Image src={fullImage} alt="Full Proof" width={800} height={800} className="rounded-lg" />
-          <Button
-            onClick={() => setFullImage(null)}
-            className="absolute top-6 right-6 bg-white/10 hover:bg-white/20 text-white"
-          >
-            <X className="w-5 h-5" />
-          </Button>
-        </div>
-      )}
-
-      <div className="bg-white dark:bg-zinc-900 border border-border rounded-xl shadow-md p-6 md:p-10 space-y-8">
-
-        {/* Image with switch */}
-        <div className="relative w-full h-64 rounded-xl overflow-hidden group cursor-pointer">
-          <Image
-            src={showProof2 ? need.proofImage2 : need.proofImage1}
-            alt="Proof"
-            fill
-            className="object-cover transition-all duration-700"
-            onClick={() => setFullImage(showProof2 ? need.proofImage2 : need.proofImage1)}
-          />
-          <div className="absolute top-3 right-3 z-10 space-x-2">
-            <Button onClick={() => setShowProof2(false)}>Proof 1</Button>
-            <Button onClick={() => setShowProof2(true)}>Proof 2</Button>
-          </div>
-        </div>
-
-        {/* Info */}
-        <div className="space-y-4 text-base leading-relaxed text-zinc-800 dark:text-zinc-100">
-          <p><strong>Name:</strong> {owner?.username}</p>
-          <div className='flex justify-between items-center'>
-            <p><strong>Contact Me:</strong> {owner?.phone}</p>
+        {fullImage && (
+          <div className="fixed inset-0 z-50 bg-black bg-opacity-90 flex items-center justify-center">
+            <Image src={fullImage} alt="Full Proof" width={800} height={800} className="rounded-lg" />
             <Button
-              variant="outline"
-              className="ml-auto cursor-pointer"
-              onClick={() => setShowChat(true)}
+              onClick={() => setFullImage(null)}
+              className="absolute top-6 right-6 bg-white/10 hover:bg-white/20 text-white"
             >
-              💬 Open Chat
+              <X className="w-5 h-5" />
             </Button>
-            {showChat && (
-              <ChatBox
-                requestId={id}
-                ownerId={need.userid}
-                onClose={() => setShowChat(false)}
-              />
-            )}
           </div>
-          <p><strong>Title:</strong> {need.mainReason}</p>
-          <p><strong>Description:</strong> {need.description}</p>
-        </div>
+        )}
 
-        {/* Progress */}
-        <div className="space-y-2">
-          <Progress value={progressRatio} className="h-2 rounded-full" />
-          <p className="text-sm text-muted-foreground">
-            ₹{need.collectedAmount} raised of ₹{need.requiredAmount}
-          </p>
-        </div>
+        <div className="bg-white dark:bg-zinc-900 border border-border rounded-xl shadow-md p-6 md:p-10 space-y-8">
 
-        {/* Donate Form */}
-        {!isOwner ? (
-          !done ? (
-            <form
-              className="bg-muted/20 p-6 rounded-lg space-y-4"
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleDonate();
-              }}
-            >
-              <h3 className="text-lg font-semibold mb-2">Help This Person 💖</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {!user?.fullName && (
+          {/* Image with switch */}
+          <div className="relative w-full h-64 rounded-xl overflow-hidden group cursor-pointer">
+            <Image
+              src={showProof2 ? need.proofImage2 : need.proofImage1}
+              alt="Proof"
+              fill
+              className="object-cover transition-all duration-700"
+              onClick={() => setFullImage(showProof2 ? need.proofImage2 : need.proofImage1)}
+            />
+            <div className="absolute top-3 right-3 z-10 space-x-2">
+              <Button onClick={() => setShowProof2(false)}>Proof 1</Button>
+              <Button onClick={() => setShowProof2(true)}>Proof 2</Button>
+            </div>
+          </div>
+
+          {/* Info */}
+          <div className="space-y-4 text-base leading-relaxed text-zinc-800 dark:text-zinc-100">
+            <p><strong>Name:</strong> {owner?.username}</p>
+            <div className='flex justify-between items-center'>
+              <p><strong>Contact Me:</strong> {owner?.phone}</p>
+              <Button
+                variant="outline"
+                className="ml-auto cursor-pointer"
+                onClick={() => setShowChat(true)}
+              >
+                💬 Open Chat
+              </Button>
+              {showChat && (
+                <ChatBox
+                  requestId={id}
+                  ownerId={need.userid}
+                  onClose={() => setShowChat(false)}
+                />
+              )}
+            </div>
+            <p><strong>Title:</strong> {need.mainReason}</p>
+            <p><strong>Description:</strong> {need.description}</p>
+          </div>
+
+          {/* Progress */}
+          <div className="space-y-2">
+            <Progress value={progressRatio} className="h-2 rounded-full" />
+            <p className="text-sm text-muted-foreground">
+              ₹{need.collectedAmount} raised of ₹{need.requiredAmount}
+            </p>
+          </div>
+
+          {/* Donate Form */}
+          {!isOwner ? (
+            !done ? (
+              <form
+                className="bg-muted/20 p-6 rounded-lg space-y-4"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleDonate();
+                }}
+              >
+                <h3 className="text-lg font-semibold mb-2">Help This Person 💖</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {!user?.fullName && (
+                    <div>
+                      <Label className="p-1">Your Name</Label>
+                      <Input
+                        value={form.name}
+                        onChange={(e) => setForm({ ...form, name: e.target.value })}
+                        required
+                      />
+                    </div>
+                  )}
                   <div>
-                    <Label className="p-1">Your Name</Label>
+                    <Label className="p-1">Amount (₹)</Label>
                     <Input
-                      value={form.name}
-                      onChange={(e) => setForm({ ...form, name: e.target.value })}
+                      type="number"
+                      value={form.amount}
+                      onChange={(e) => setForm({ ...form, amount: e.target.value })}
                       required
                     />
                   </div>
-                )}
-                <div>
-                  <Label className="p-1">Amount (₹)</Label>
-                  <Input
-                    type="number"
-                    value={form.amount}
-                    onChange={(e) => setForm({ ...form, amount: e.target.value })}
-                    required
-                  />
                 </div>
+
+
+                {payload ? (
+                  <Button disabled className="w-full">
+                    <Loader2Icon className="animate-spin mr-2 h-4 w-4" />
+                    Please wait
+                  </Button>
+                ) : (
+                  <Button
+                    type="submit"
+                    className="cursor-pointer w-full bg-gradient-to-r from-pink-500 to-red-500 text-white"
+                  >
+                    Donate Now
+                  </Button>
+                )}
+              </form>
+            ) : (
+              <div className="bg-muted/20 p-6 rounded-lg text-center text-green-600 font-semibold">
+                🎉 Collection complete! Thank you for your generous support. 🙏
               </div>
-
-
-              {payload ? (
-                <Button disabled className="w-full">
-                  <Loader2Icon className="animate-spin mr-2 h-4 w-4" />
-                  Please wait
-                </Button>
-              ) : (
-                <Button
-                  type="submit"
-                  className="cursor-pointer w-full bg-gradient-to-r from-pink-500 to-red-500 text-white"
-                >
-                  Donate Now
-                </Button>
-              )}
-            </form>
+            )
           ) : (
-            <div className="bg-muted/20 p-6 rounded-lg text-center text-green-600 font-semibold">
-              🎉 Collection complete! Thank you for your generous support. 🙏
+            done && (
+              <div className="bg-muted/20 p-6 rounded-lg text-center text-green-600 font-semibold">
+                🎉 Collection completed
+              </div>
+            )
+          )}
+
+
+          {/* Supporters */}
+          {need?.helps?.length > 0 && (
+            <div className="mt-6">
+              <h4 className="font-semibold text-md mb-2">Supporters</h4>
+              <ul className="text-sm text-muted-foreground list-disc pl-4 space-y-1">
+                {need.helps.map((h, idx) => (
+                  <li key={idx}>{h.name} donated ₹{h.givenAmount}</li>
+                ))}
+              </ul>
             </div>
-          )
-        ) : (
-          done && (
-            <div className="bg-muted/20 p-6 rounded-lg text-center text-green-600 font-semibold">
-              🎉 Collection completed
-            </div>
-          )
-        )}
+          )}
 
-
-        {/* Supporters */}
-        {need?.helps?.length > 0 && (
-          <div className="mt-6">
-            <h4 className="font-semibold text-md mb-2">Supporters</h4>
-            <ul className="text-sm text-muted-foreground list-disc pl-4 space-y-1">
-              {need.helps.map((h, idx) => (
-                <li key={idx}>{h.name} donated ₹{h.givenAmount}</li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-      </div>
+        </div>
+      </BounceInTop>
       <ToastContainer
         position="top-right"              // top-left | top-right | top-center | bottom-left | bottom-right | bottom-center
         autoClose={3000}                  // Time in ms before auto dismissing toast

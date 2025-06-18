@@ -11,6 +11,7 @@ import nProgress from 'nprogress';
 import { Loader2Icon } from 'lucide-react';
 import 'react-toastify/dist/ReactToastify.css';
 import { sendReminderEmail as sendEmailToUser } from '@/lib/sendReminderEmail';
+import BounceInTop from '../components/BounceInTop';
 export default function PayToHimPage() {
   const { user } = useUser();
   const [change, setChange] = useState(false);
@@ -181,32 +182,32 @@ export default function PayToHimPage() {
   return (
     <div className="max-w-2xl mx-auto py-6 space-y-4 px-4">
       <h1 className="text-2xl font-bold text-center">📤 Add Outgoing Payment</h1>
-
-      <div className="space-y-3 bg-muted/40 p-4 rounded-xl shadow-md">
-        <Input
-          placeholder="Receiver's Name *"
-          value={newPayment.sendername}
-          onChange={(e) => setNewPayment({ ...newPayment, sendername: e.target.value })}
-        />
-        <Input
-          type="number"
-          placeholder="Amount *"
-          value={newPayment.amount}
-          onChange={(e) => setNewPayment({ ...newPayment, amount: e.target.value })}
-        />
-        <Textarea
-          placeholder="Reason *"
-          value={newPayment.reason}
-          onChange={(e) => setNewPayment({ ...newPayment, reason: e.target.value })}
-        />
-        <Input
-          placeholder="Reciever's Email (optional)"
-          value={newPayment.senderemail}
-          onChange={(e) => setNewPayment({ ...newPayment, senderemail: e.target.value })}
-        />
-        <Button onClick={handleAdd} className="w-full cursor-pointer">➕ Add Outgoing Payment</Button>
-      </div>
-
+      <BounceInTop>
+        <div className="space-y-3 bg-muted/40 p-4 rounded-xl shadow-md">
+          <Input
+            placeholder="Receiver's Name *"
+            value={newPayment.sendername}
+            onChange={(e) => setNewPayment({ ...newPayment, sendername: e.target.value })}
+          />
+          <Input
+            type="number"
+            placeholder="Amount *"
+            value={newPayment.amount}
+            onChange={(e) => setNewPayment({ ...newPayment, amount: e.target.value })}
+          />
+          <Input
+            placeholder="Reason *"
+            value={newPayment.reason}
+            onChange={(e) => setNewPayment({ ...newPayment, reason: e.target.value })}
+          />
+          <Input
+            placeholder="Reciever's Email (optional)"
+            value={newPayment.senderemail}
+            onChange={(e) => setNewPayment({ ...newPayment, senderemail: e.target.value })}
+          />
+          <Button onClick={handleAdd} className="w-full cursor-pointer">➕ Add Outgoing Payment</Button>
+        </div>
+      </BounceInTop>
       {payments.length > 0 && (
         <div className="space-y-4">
           {payments.filter(p => !p.paymentdone).map(payment => (

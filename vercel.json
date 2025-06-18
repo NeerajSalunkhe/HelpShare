@@ -1,8 +1,5 @@
 {
   "crons": [
-    {
-      "path": "/api/remindercron",
-      "schedule": "30 0 * * *"
-    }
+    
   ]
 }

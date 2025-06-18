@@ -1,10 +1,7 @@
 import './globals.css';
 import { Geist, Geist_Mono } from 'next/font/google';
-import {
-  ClerkProvider,
-} from '@clerk/nextjs';
+import { ClerkProvider } from '@clerk/nextjs';
 import { ThemeProvider } from './components/theme-provider';
-import { ToastContainer, toast } from 'react-toastify';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -27,6 +24,9 @@ export const metadata = {
 
 import Navbar from './components/Navbar';
 import GlobalLoadingBar from './components/GlobalLoadingBar';
+import Footer from './components/Footer';
+import ThreeCanvasWrapper from './components/ThreeCanvasWrapper';
+
 export default function RootLayout({ children }) {
   return (
     <ClerkProvider>
@@ -35,24 +35,14 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable}`}
         suppressHydrationWarning
       >
-        <body className="antialiased">
+        <body className="antialiased relative">
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <GlobalLoadingBar />
             <Navbar />
-            {children}
-            {/* <ToastContainer
-              position="top-right"              // top-left | top-right | top-center | bottom-left | bottom-right | bottom-center
-              autoClose={3000}                  // Time in ms before auto dismissing toast
-              hideProgressBar={false}          // Set true to hide the progress bar
-              newestOnTop={false}              // Newest toast appears on top
-              closeOnClick                     // Close toast on click
-              rtl={false}                      // For right-to-left languages
-              pauseOnFocusLoss                 // Pause toast timer when window loses focus
-              draggable                        // Allow dragging to dismiss
-              pauseOnHover                     // Pause timer on hover
-              theme="light"                    // light | dark | colored
-              limit={3}                        // Max number of toasts to show at once
-            /> */}
+            <ThreeCanvasWrapper /> {/* Place first to ensure it's behind everything */}
+            <div className='my-25'/>
+              {children}
+            <Footer />
           </ThemeProvider>
         </body>
       </html>

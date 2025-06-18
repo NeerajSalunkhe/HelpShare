@@ -11,6 +11,8 @@ import { sendReminderEmail as sendEmailToUser } from '@/lib/sendReminderEmail';
 import nProgress from 'nprogress';
 import { Loader2 as Loader2Icon } from 'lucide-react';
 import 'react-toastify/dist/ReactToastify.css';
+import BounceInTop from '../components/BounceInTop';
+import BounceInBottom from '../components/BounceInBottom';
 
 export default function PersonalPayPage() {
   const { user } = useUser();
@@ -199,64 +201,66 @@ export default function PersonalPayPage() {
   return (
     <div className="max-w-3xl mx-auto py-6 px-3 space-y-4">
       <ToastContainer position="top-right" autoClose={3000} limit={3} theme="light" />
-
-      <div className="text-center space-y-1">
-        <h1 className="text-2xl font-semibold">Add a Payment to You 💸</h1>
-        <p className="text-sm text-muted-foreground">Track people who owe you</p>
-      </div>
-
-      <div className="bg-muted/40 p-4 rounded-lg border space-y-3">
-        <Input
-          placeholder="Payer Name *"
-          value={newPayment.payername}
-          onChange={(e) => setNewPayment({ ...newPayment, payername: e.target.value })}
-        />
-        <Input
-          type="number"
-          placeholder="Amount (₹) *"
-          value={newPayment.amount}
-          onChange={(e) => setNewPayment({ ...newPayment, amount: e.target.value })}
-        />
-        <Textarea
-          placeholder="Reason *"
-          value={newPayment.reason}
-          onChange={(e) => setNewPayment({ ...newPayment, reason: e.target.value })}
-        />
-        <Input
-          placeholder="Payer Email (optional)"
-          value={newPayment.payeremail}
-          onChange={(e) => setNewPayment({ ...newPayment, payeremail: e.target.value })}
-        />
-        <Button onClick={handleAdd} className="w-full text-sm">
-          ➕ Add Recieving Payment
-        </Button>
-      </div>
-
-      {payments.length > 0 && (
-        <div className="space-y-3">
-          <h2 className="text-lg font-semibold">Pending Payments</h2>
-          {payments.filter(p => !p.paymentdone).map(payment => (
-            <PaymentCard
-              key={payment.id}
-              payment={payment}
-              onUpdateEmail={handleUpdateEmail}
-              onMarkDone={handleMarkAsDone}
-              onSendReminder={handleSendReminder}
-              loading={loadingIds}
-              done={false}
-            />
-          ))}
-
-          {payments.filter(p => p.paymentdone).length > 0 && (
-            <>
-              <h2 className="text-lg font-semibold pt-3 border-t">Completed Payments</h2>
-              {payments.filter(p => p.paymentdone).map(payment => (
-                <PaymentCard key={payment.id} payment={payment} done />
-              ))}
-            </>
-          )}
+      <BounceInTop>
+        <div className="text-center space-y-1">
+          <h1 className="text-2xl font-semibold">Add a Payment to You 💸</h1>
+          <p className="text-sm text-muted-foreground">Track people who owe you</p>
         </div>
-      )}
+
+        <div className="bg-muted/40 p-4 rounded-lg border space-y-3">
+          <Input
+            placeholder="Payer Name *"
+            value={newPayment.payername}
+            onChange={(e) => setNewPayment({ ...newPayment, payername: e.target.value })}
+          />
+          <Input
+            type="number"
+            placeholder="Amount (₹) *"
+            value={newPayment.amount}
+            onChange={(e) => setNewPayment({ ...newPayment, amount: e.target.value })}
+          />
+          <Input
+            placeholder="Reason *"
+            value={newPayment.reason}
+            onChange={(e) => setNewPayment({ ...newPayment, reason: e.target.value })}
+          />
+          <Input
+            placeholder="Payer Email (optional)"
+            value={newPayment.payeremail}
+            onChange={(e) => setNewPayment({ ...newPayment, payeremail: e.target.value })}
+          />
+          <Button onClick={handleAdd} className="w-full text-sm">
+            ➕ Add Recieving Payment
+          </Button>
+        </div>
+      </BounceInTop>
+      <BounceInBottom>
+        {payments.length > 0 && (
+          <div className="space-y-3">
+            <h2 className="text-lg font-semibold">Pending Payments</h2>
+            {payments.filter(p => !p.paymentdone).map(payment => (
+              <PaymentCard
+                key={payment.id}
+                payment={payment}
+                onUpdateEmail={handleUpdateEmail}
+                onMarkDone={handleMarkAsDone}
+                onSendReminder={handleSendReminder}
+                loading={loadingIds}
+                done={false}
+              />
+            ))}
+
+            {payments.filter(p => p.paymentdone).length > 0 && (
+              <>
+                <h2 className="text-lg font-semibold pt-3 border-t">Completed Payments</h2>
+                {payments.filter(p => p.paymentdone).map(payment => (
+                  <PaymentCard key={payment.id} payment={payment} done />
+                ))}
+              </>
+            )}
+          </div>
+        )}
+      </BounceInBottom>
     </div>
   );
 }
