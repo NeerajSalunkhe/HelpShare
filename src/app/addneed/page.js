@@ -167,10 +167,9 @@ export default function NeedHelpForm() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-1">
                   <Label htmlFor="proof1">Proof Image 1</Label>
-                  <Input id="proof1" type="file" accept="image/*" {...register('proof1')} />
+                  <Input id="proof1" type="file" accept="image/*" {...register('proof1')}/>
                   {errors.proof1 && <p className="text-sm">{errors.proof1.message}</p>}
                 </div>
-
                 <div className="space-y-1">
                   <Label htmlFor="proof2">Proof Image 2</Label>
                   <Input id="proof2" type="file" accept="image/*" {...register('proof2')} />

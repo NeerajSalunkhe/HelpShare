@@ -37,7 +37,7 @@ export default function Navbar() {
       .then(setAnimationData);
   }, []);
   return (
-    <BounceInTop>
+    <>
       <header className="backdrop-blur-xs fixed top-0 z-50 w-full border-b bg-background/60 supports-[backdrop-filter]:bg-background/60">
         <div className="flex h-20 items-center justify-between max-w-screen-xl mx-auto">
           {/* Logo */}
@@ -157,6 +157,6 @@ export default function Navbar() {
           </div>
         </div>
       </header>
-    </BounceInTop>
+    </>
   );
 }
